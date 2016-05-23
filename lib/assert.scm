@@ -19,8 +19,13 @@
        (display a)))
     ()))
 
-(define assert
-  (lambda (a m)
+(define (my/pp a)
+  (with-output-to-string
+    (lambda () (pp a))))
+
+(define (assert a #!optional m)
+  (if (list? a)
+    (assert (eval a (nearest-repl/environment)) (my/pp a))
     (if a
       (term-display (string "\n" "PASSED: " m "\n"))
       (term-display (string "\n" "FAILED: " m "\n")))))
