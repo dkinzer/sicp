@@ -64,6 +64,28 @@
 ;      idea, implement `equal?' as a procedure.(5)
 ; 
 ; {{{3 Solution
+(define (my/equal? a b)
+  (cond
+    ((and (null? a) (null? b))   true)
+    ((or (null? a) (null? b))   false)
+    ((and (symbol? a) (symbol? b)) (eq? a b))
+    ((and (list? a) (list? b)) (and (my/equal? (car a) (car b))
+                                    (my/equal? (cdr a) (cdr b))))
+    (else false)))
+
+(assert '(my/equal? 'a 'a))
+(assert '(my/equal? '() '()))
+(assert '(my/equal? '(a) '(a)))
+(assert '(my/equal? '(a b) '(a b)))
+(assert '(my/equal? '(((((a))b))c) '(((((a))b))c)))
+
+(assert '(eq? false (my/equal? 'a 'b)))
+(assert '(eq? false (my/equal? '(a) '(b))))
+(assert '(eq? false (my/equal? '(a b) '(b a))))
+(assert '(eq? false (my/equal? '(a b) '(a c))))
+(assert '(eq? false (my/equal? '(a b c) '(a b))))
+(assert '(eq? false (my/equal? '(a) '())))
+
 ; {{{2 Exercise 2.55:
 ; {{{3 Problem
 ;      Eva Lu Ator types to the interpreter the
