@@ -1299,7 +1299,8 @@
 ; Moving the recursive call from the sequence argument of flatmap
 ; to the procedure argument of flatmap, turns queens-cols from a
 ; linearly recursive procedure to a tree-recursive procedure.  The
-; therefore will grow exponentially with respect to n^2.
+; expression expansion therefore will grow exponentially with respect
+; to n^2.
 ; {{{1 2.2.4 Example: A Picture Language
 ;
 ; {{{2 Exercise 2.44:
