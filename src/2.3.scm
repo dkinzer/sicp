@@ -23,26 +23,19 @@
 ;           (memq 'red '(red shoes blue socks))
 ; 
 ; {{{3 Solution
-(assert (equal? (list 'a 'b 'c) '(a b c)) 
-        "(equal? (list 'a 'b 'c) '(a b c))")
-(assert (equal? (list (list 'george)) '((george)))
-        "(equal? (list (list 'george)) '((george)))")
-(assert (equal? (cdr '((x1 x2) (y1 y2))) '((y1 y2)))
-        "(equal? (cdr '((x1 x2)) (y1 y2)) '((y1 y2)))")
-(assert (equal? (cadr '((x1 x2) (y1 y2))) '(y1 y2))
-        "(equal? (cadr '((x1 x2)) (y1 y2)) '(y1 y2)")
-(assert (eq? (pair? (car '(a short list))) #f)  
-       "(eq? (pair? (car '(a short list))) #f)")
+(assert '(equal? (list 'a 'b 'c) '(a b c)))
+(assert '(equal? (list (list 'george)) '((george))))
+(assert '(equal? (cdr '((x1 x2) (y1 y2))) '((y1 y2))))
+(assert '(equal? (cadr '((x1 x2) (y1 y2))) '(y1 y2)))
+(assert '(eq? (pair? (car '(a short list))) #f))
 
 (define (memq item x)
   (cond ((null? x) false)
         ((eq? item (car x)) x)
         (else (memq item (cdr x)))))
 
-(assert (equal? (memq 'red '((red shoes) (blue socks))) #f)  
-       "(equal? (memq 'red '((red shoes) (blue socks))) #f)")
-(assert (equal? (memq 'red '(red shoes blue socks)) '(red shoes blue socks))
-        "(equal? (memq 'red '(red shoes blue socks)) '(red soes blue socks)")
+(assert '(equal? (memq 'red '((red shoes) (blue socks))) #f))
+(assert '(equal? (memq 'red '(red shoes blue socks)) '(red shoes blue socks)))
 
 
 ; {{{2 Exercise 2.54:
@@ -96,7 +89,8 @@
 ;      To her surprise, the interpreter prints back `quote'.  Explain.
 ; 
 ; {{{3 Solution
-; 
+; `''abracadabra` is actually short for `(quote (quote abracadabra))` and car of this list is `quote`
+(assert '(equal? ''a (quote (quote a))))
 ; {{{1 2.3.2 Example: Symbolic Differentiation
 ; 
 ; {{{2 Exercise 2.56:
