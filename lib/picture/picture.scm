@@ -26,6 +26,8 @@ USA.
 
 ;;;; 6.001 Images
 
+(load "lib/picture/pic-imag")
+(load "lib/picture/pic-reco")
 (declare (usual-integrations))
 
 ;;;; Miscellaneous Utilities

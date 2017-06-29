@@ -1,5 +1,5 @@
 (declare (usual-integrations))
-(load '("lib/assert" "lib/math"))
+(load '("lib/assert" "lib/math" "lib/picture/hend"))
 
 ; {{{1 2.2.1 Representing Sequences
 ;
@@ -67,6 +67,12 @@
 ;      will still have the same form, but it will access its second
 ;      argument differently, as follows:
 ;
+;      Define the procedures `first-denomination',
+;      `except-first-denomination', and `no-more?' in terms of primitive
+;      operations on list structures.  Does the order of the list
+;      `coin-values' affect the answer produced by `cc'?  Why or why not?
+
+; {{{3 Solution
 (define (first-denomination coin-values)
   (car coin-values))
 
@@ -86,11 +92,6 @@
                     (first-denomination coin-values))
                  coin-values)))))
 
-;      Define the procedures `first-denomination',
-;      `except-first-denomination', and `no-more?' in terms of primitive
-;      operations on list structures.  Does the order of the list
-;      `coin-values' affect the answer produced by `cc'?  Why or why not?
-
 (assert (= 292 (cc 100 us-coins))
         "The new #cc procedure works as expected.")
 
@@ -98,7 +99,6 @@
         "The order of the coins does not matter becase the recursive nature of the
         cc procedure gurantees that all combinations will be exhausted before on evaluation
         regardless of the order of the list.")
-; {{{3 Solution
 ; {{{2 Exercise 2.20:
 ; {{{3 Problem
 ;      The procedures `+', `*', and `list' take
@@ -785,8 +785,8 @@
 (assert (equal? y (map square x))
         "(map square (1 2 3 4)) equals (1 4 9 16)")
 
-(define (append seq1 seq2)
-  (accumulate cons seq2 seq1))
+;(define (append seq1 seq2)
+  ;(accumulate cons seq2 seq1))
 
 (define x (list 1 2 3))
 (define y (list 4 5 6))
@@ -1310,6 +1310,39 @@
 ;      switches the roles of `below' and `beside'.
 ;
 ; {{{3 Solution
+(define (flipped-pairs painter)
+  (let ((painter2 (beside painter (flip-vert painter))))
+    (below painter2 painter2)))
+
+
+(define (right-split painter n)
+  (if (= n 0)
+      painter
+      (let ((smaller (right-split painter (- n 1))))
+        (beside painter (below smaller smaller)))))
+
+(define (up-split painter n)
+  (if (= n 0)
+      painter
+      (let ((smaller (up-split painter (- n 1))))
+        (below painter (besidesmaller smaller)))))
+
+(define (corner-split painter n)
+  (if (= n 0)
+      painter
+      (let ((up (up-split painter (- n 1)))
+            (right (right-split painter (- n 1))))
+        (let ((top-left (beside up up))
+              (bottom-right (below right right))
+              (corner (corner-split painter (- n 1))))
+          (beside (below painter top-left)
+                  (below bottom-right corner))))))
+
+(define (square-limit painter n)
+  (let ((quarter (corner-split painter n)))
+    (let ((half (beside (flip-horiz quarter) quarter)))
+      (below (flip-vert half) half))))
+
 ; {{{2 Exercise 2.45:
 ; {{{3 Problem
 ;      `Right-split' and `up-split' can be expressed as

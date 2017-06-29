@@ -14,6 +14,9 @@
 
 ;;;The following procedures create primitive painters.
 ;;;They are defined in the file (lib/picture/prmpnt.scm).
+(load "lib/picture/prmpnt")
+(load "lib/picture/pic-read")
+
 ;;;You need not deal with the implementation of these procedures,
 ;;;just use them as black boxes.
 
@@ -24,10 +27,10 @@
 ;;;(define (procedure->painter proc) ....)
 
 ;;;construct a painter from a list of segments
-;;;(define (segments->painter segments) ....)
+;;;(define (procedure->painter proc) ....)
 
 ;;;construct a painter from a Scheme picture
-;;;(define (picture->painter picture) ....)
+;;;(define (picture->painter picture) picture)
 
 (define (load-painter file-name)
   (picture->painter
@@ -59,7 +62,7 @@
   (segments->painter
    '()))
 
-(define square
+(define hand/square
   (segments->painter
    (list (make-segment (make-vect 0.0 0.0) (make-vect 1.0 0.0))
          (make-segment (make-vect 1.0 0.0) (make-vect 1.0 1.0))
@@ -139,7 +142,6 @@
 		    (vector-sub (m corner1) new-origin)
 		    (vector-sub (m corner2) new-origin))))))
 
-
 (define (transform-painter origin corner1 corner2)
   (lambda (painter)
     (compose painter
@@ -178,7 +180,6 @@
 (define rotate270 (repeated rotate90 3))
 
 
-
 (define (below painter1 painter2)
   (rotate270 (beside (rotate90 painter2)
                      (rotate90 painter1))))

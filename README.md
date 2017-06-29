@@ -24,5 +24,8 @@ assertions.
 - `make`     to run assertions for all the sections.
 - `make #.#` to run assertions for a single section.
 
+To play around with picture language:
+- `(load "lib/picture/psgo")` from within the repl.
+
 [1]: http://mitpress.mit.edu/sicp/full-text/book/book-Z-H-4.html
 [2]: http://www.meetup.com/Clojadelphia

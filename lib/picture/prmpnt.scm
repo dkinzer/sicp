@@ -11,7 +11,32 @@
 ;;;; This file assumes the following data structures have been defined:
 ;;;; frames: make-frame, frame-origin, frame-edge1, frame-edge2
 ;;;; vectors: make-vect, vector-xcor, vector-ycor, vector-scale, vector-add, vector-sub
+(define (make-vect x y)
+  (list 'vector x y))
+
+(define vector-xcor cadr)
+
+(define vector-ycor caddr)
+
+(define (vector-scale s v)
+  (make-vect (* s (vector-xcor v))
+             (* s (vector-ycor v))))
+
+(define (vector-add v1 v2)
+  (make-vect (+ (vector-xcor v1) (vector-xcor v2))
+             (+ (vector-ycor v1) (vector-ycor v2))))
+
+(define (vector-sub v1 v2)
+  (make-vect (- (vector-xcor v1) (vector-xcor v2))
+             (- (vector-ycor v1) (vector-ycor v2))))
+
 ;;;; segments: make-segment, segment-start, segment-end
+(define (make-segment start end)
+  (list 'segment start end))
+
+(define segment-start cadr)
+
+(define segment-end caddr)
 
 (load "lib/picture/picture")
 (declare (usual-integrations))
@@ -25,7 +50,6 @@
 ;;;; resolution, but this is rather slow.   Note: There's some
 ;;;; (roundoff?) problem that occasioanally tries to plot a point in
 ;;;; row 256, which is why the windows are 257x257.
-
 
 (define *screen-width* 128)
 (define *screen-height* 128)
