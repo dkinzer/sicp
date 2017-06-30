@@ -15,6 +15,7 @@
   (load "lib/picture/pic-ops")
   (load "lib/picture/pic-read")
   (load "lib/picture/pic-reco")
+  (load "lib/picture/picture")
 
   (load "lib/picture/prmpnt")
   (load "lib/picture/hutils")

@@ -14,8 +14,8 @@
 
 ;;;The following procedures create primitive painters.
 ;;;They are defined in the file (lib/picture/prmpnt.scm).
-(load "lib/picture/prmpnt")
-(load "lib/picture/pic-read")
+;(load "lib/picture/prmpnt")
+;(load "lib/picture/pic-read")
 
 ;;;You need not deal with the implementation of these procedures,
 ;;;just use them as black boxes.
@@ -162,6 +162,7 @@
                      (make-vect 1 1)
                      (make-vect 0 0)))
 
+(define flip-vert (compose flip-horiz rotate90))
 
 (define (beside painter1 painter2)
   (let ((split-point (make-vect .5 0)))

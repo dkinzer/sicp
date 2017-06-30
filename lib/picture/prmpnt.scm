@@ -38,7 +38,6 @@
 
 (define segment-end caddr)
 
-(load "lib/picture/picture")
 (declare (usual-integrations))
 
 ;;;; The variable *the-screen* represents the target image array that will be 
