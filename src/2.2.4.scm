@@ -84,6 +84,24 @@
 ;                        s * (x, y) = (sx, sy)
 ;
 ; {{{3 Solution
+(define (make-vect x y)
+  (list 'vector x y))
+
+(define vector-xcor cadr)
+
+(define vector-ycor caddr)
+
+(define (vector-scale s v)
+  (make-vect (* s (vector-xcor v))
+             (* s (vector-ycor v))))
+
+(define (vector-add v1 v2)
+  (make-vect (+ (vector-xcor v1) (vector-xcor v2))
+             (+ (vector-ycor v1) (vector-ycor v2))))
+
+(define (vector-sub v1 v2)
+  (make-vect (- (vector-xcor v1) (vector-xcor v2))
+             (- (vector-ycor v1) (vector-ycor v2))))
 ; {{{2 Exercise 2.47:
 ; {{{3 Problem
 ;      Here are two possible constructors for frames:
