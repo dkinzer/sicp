@@ -1,3 +1,5 @@
+
+(load '("lib/assert" "lib/math"))
 (load "lib/picture/psgo")
 ; {{{1 2.2.4 Example: A Picture Language
 ;
@@ -102,6 +104,11 @@
 (define (vector-sub v1 v2)
   (make-vect (- (vector-xcor v1) (vector-xcor v2))
              (- (vector-ycor v1) (vector-ycor v2))))
+
+(assert (equal? (list 'vector 1 2) (make-vect 1 2)) "(make-vect 1 2)")
+(assert (= 1 (vector-xcor (make-vect 1 2))) "(vector-xcor '(vector 1 2))")
+
+
 ; {{{2 Exercise 2.47:
 ; {{{3 Problem
 ;      Here are two possible constructors for frames:
