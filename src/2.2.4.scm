@@ -1,6 +1,15 @@
 
-(load '("lib/assert" "lib/math"))
-(load "lib/picture/psgo")
+(load '("lib/assert"
+        "lib/math"
+        "lib/picture/pic-imag"
+        "lib/picture/pic-ops"
+        "lib/picture/pic-read"
+        "lib/picture/pic-reco"
+        "lib/picture/picture"
+        "lib/picture/prmpnt"
+        "lib/picture/hutils"
+        "lib/picture/hend.scm"))
+
 ; {{{1 2.2.4 Example: A Picture Language
 ;
 ; {{{2 Exercise 2.44:
