@@ -115,18 +115,52 @@
              (- (vector-ycor v1) (vector-ycor v2))))
 
 (assert (equal? (list 'vector 1 2) (make-vect 1 2)) "(make-vect 1 2)")
-(assert (= 1 (vector-xcor (make-vect 1 2))) "(vector-xcor '(vector 1 2))")
 
+(assert (= 1 (vector-xcor (make-vect 1 2))) "(vector-xcor [1 2])")
+
+(let ((expected (list 'vector 2 3))
+      (actual (vector-add (make-vect 1 2) (make-vect 1 1))))
+  (assert (equal? expected actual) "(vector-add [1 2] [1 1])"))
+
+(let ((expected (list 'vector 0 1))
+      (actual (vector-sub (make-vect 1 2) (make-vect 1 1))))
+  (assert (equal? expected actual) "(vector-sub [1 2] [1 1])"))
+
+(let ((expected (list 'vector 2 4))
+      (actual (vector-scale 2 (make-vect 1 2))))
+  (assert (equal? expected actual) "(vector-scale 2 [2 4])"))
 
 ; {{{2 Exercise 2.47:
 ; {{{3 Problem
 ;      Here are two possible constructors for frames:
-;
-;           (define (make-frame origin edge1 edge2)
-;             (list origin edge1 edge2))
-;
-;           (define (make-frame origin edge1 edge2)
-;             (cons origin (cons edge1 edge2)))
+
+
+(define (make-frame origin edge1 edge2)
+  (list origin edge1 edge2))
+(define frame-origin car)
+(define frame-edge1 cadr)
+(define frame-edge2 caddr)
+ 
+(define test-org (make-vect 0 1))
+(define test-edg1 (make-vect 1 1))
+(define test-edg2 (make-vect 1 2))
+(define test-frame (make-frame test-org test-edg1 test-edg2))
+
+(assert (equal? test-org (frame-origin test-frame)) "(frame-orgin frame)")
+(assert (equal? test-edg1 (frame-edge1 test-frame)) "(frame-edge1 frame)")
+(assert (equal? test-edg2 (frame-edge2 test-frame)) "(frame-edge2 frame)")
+
+
+(define (make-frame origin edge1 edge2)
+  (cons origin (cons edge1 edge2)))
+(define frame-origin car)
+(define frame-edge1 cadr)
+(define frame-edge2 caddr)
+
+(assert (equal? test-org (frame-origin test-frame)) "(frame-orgin frame)")
+(assert (equal? test-edg1 (frame-edge1 test-frame)) "(frame-edge1 frame)")
+(assert (equal? test-edg2 (frame-edge2 test-frame)) "(frame-edge2 frame)")
+
 ;
 ;      For each constructor supply the appropriate selectors to produce an
 ;      implementation for frames.
