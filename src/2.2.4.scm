@@ -177,6 +177,21 @@
 ;      selectors `start-segment' and `end-segment'.
 ;
 ; {{{3 Solution
+
+(define (make-segment start end)
+  (list 'segment start end))
+
+(define segment-start cadr)
+
+(define segment-end caddr)
+
+(define test-start (make-vect 0 1))
+(define test-end (make-vect 1 0))
+(define test-segment (make-segment test-start test-end))
+
+(assert (equal? test-start (segment-start test-segment)) "(segment-start segment)")
+(assert (equal? test-end (segment-end test-segment)) "(segment-end segment)")
+
 ; {{{2 Exercise 2.49:
 ; {{{3 Problem
 ;      Use `segments->painter' to define the following
