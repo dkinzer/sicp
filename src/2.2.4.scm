@@ -29,26 +29,26 @@
 
 (define (right-split painter n)
   (if (= n 0)
-      painter
-      (let ((smaller (right-split painter (- n 1))))
-        (beside painter (below smaller smaller)))))
+    painter
+    (let ((smaller (right-split painter (- n 1))))
+      (beside painter (below smaller smaller)))))
 
 (define (up-split painter n)
   (if (= n 0)
-      painter
-      (let ((smaller (up-split painter (- n 1))))
-        (below painter (beside smaller smaller)))))
+    painter
+    (let ((smaller (up-split painter (- n 1))))
+      (below painter (beside smaller smaller)))))
 
 (define (corner-split painter n)
   (if (= n 0)
-      painter
-      (let ((up (up-split painter (- n 1)))
-            (right (right-split painter (- n 1))))
-        (let ((top-left (beside up up))
-              (bottom-right (below right right))
-              (corner (corner-split painter (- n 1))))
-          (beside (below painter top-left)
-                  (below bottom-right corner))))))
+    painter
+    (let ((up (up-split painter (- n 1)))
+          (right (right-split painter (- n 1))))
+      (let ((top-left (beside up up))
+            (bottom-right (below right right))
+            (corner (corner-split painter (- n 1))))
+        (beside (below painter top-left)
+                (below bottom-right corner))))))
 
 (define (square-limit painter n)
   (let ((quarter (corner-split painter n)))
@@ -136,11 +136,11 @@
 
 
 (define (make-frame origin edge1 edge2)
-  (list origin edge1 edge2))
-(define frame-origin car)
-(define frame-edge1 cadr)
-(define frame-edge2 caddr)
- 
+  (list 'frame origin edge1 edge2))
+(define frame-origin cadr)
+(define frame-edge1 caddr)
+(define frame-edge2 cadddr)
+
 (define test-org (make-vect 0 1))
 (define test-edg1 (make-vect 1 1))
 (define test-edg2 (make-vect 1 2))
@@ -150,12 +150,16 @@
 (assert (equal? test-edg1 (frame-edge1 test-frame)) "(frame-edge1 frame)")
 (assert (equal? test-edg2 (frame-edge2 test-frame)) "(frame-edge2 frame)")
 
-
 (define (make-frame origin edge1 edge2)
   (cons origin (cons edge1 edge2)))
 (define frame-origin car)
 (define frame-edge1 cadr)
-(define frame-edge2 caddr)
+(define frame-edge2 cddr)
+
+(define test-org (make-vect 0 1))
+(define test-edg1 (make-vect 1 1))
+(define test-edg2 (make-vect 1 2))
+(define test-frame (make-frame test-org test-edg1 test-edg2))
 
 (assert (equal? test-org (frame-origin test-frame)) "(frame-orgin frame)")
 (assert (equal? test-edg1 (frame-edge1 test-frame)) "(frame-edge1 frame)")
@@ -192,6 +196,7 @@
 (assert (equal? test-start (segment-start test-segment)) "(segment-start segment)")
 (assert (equal? test-end (segment-end test-segment)) "(segment-end segment)")
 
+
 ; {{{2 Exercise 2.49:
 ; {{{3 Problem
 ;      Use `segments->painter' to define the following
@@ -208,6 +213,47 @@
 ;        d. The `wave' painter.
 ;
 ; {{{3 Solution
+
+(define outline
+  (segments->painter
+    (list (make-segment (make-vect .1 .1) (make-vect .1 .9))
+          (make-segment (make-vect .1 .9) (make-vect .9 .9))
+          (make-segment (make-vect .9 .9) (make-vect .9 .1))
+          (make-segment (make-vect .9 .1) (make-vect .1 .1)))))
+
+(define x
+  (segments->painter
+    (list (make-segment (make-vect .1 .1) (make-vect .9 .9))
+          (make-segment (make-vect .1 .9) (make-vect .9 .1)))))
+
+(define diamond
+  (segments->painter
+    (list (make-segment (make-vect .0 .5) (make-vect .5 1.))
+          (make-segment (make-vect .5 1.) (make-vect 1. .5))
+          (make-segment (make-vect 1. .5) (make-vect .5 .0))
+          (make-segment (make-vect .5 0) (make-vect .0 .5)))))
+
+(define wave
+  ;; copied from library.
+  (segments->painter
+    (list (make-segment (make-vect 0.25 0.00) (make-vect 0.37 0.37)) ;1
+          (make-segment (make-vect 0.40 0.00) (make-vect 0.50 0.25)) ;2
+          (make-segment (make-vect 0.50 0.25) (make-vect 0.62 0.00)) ;3
+          (make-segment (make-vect 0.75 0.00) (make-vect 0.70 0.50)) ;4
+          (make-segment (make-vect 0.70 0.50) (make-vect 1.00 0.30)) ;5
+          (make-segment (make-vect 1.00 0.50) (make-vect 0.75 0.62)) ;6
+          (make-segment (make-vect 0.75 0.62) (make-vect 0.62 0.62)) ;7
+          (make-segment (make-vect 0.62 0.62) (make-vect 0.75 0.75)) ;8
+          (make-segment (make-vect 0.75 0.75) (make-vect 0.62 1.00)) ;9
+          (make-segment (make-vect 0.40 1.00) (make-vect 0.30 0.75)) ;10
+          (make-segment (make-vect 0.30 0.75) (make-vect 0.40 0.62)) ;11
+          (make-segment (make-vect 0.40 0.62) (make-vect 0.25 0.62)) ;12
+          (make-segment (make-vect 0.25 0.62) (make-vect 0.20 0.50)) ;13
+          (make-segment (make-vect 0.20 0.50) (make-vect 0.00 0.70)) ;14
+          (make-segment (make-vect 0.37 0.37) (make-vect 0.30 0.50)) ;15
+          (make-segment (make-vect 0.30 0.50) (make-vect 0.12 0.37)) ;16
+          (make-segment (make-vect 0.12 0.37) (make-vect 0.00 0.50)) ;17
+          )))
 ; {{{2 Exercise 2.50:
 ; {{{3 Problem
 ;      Define the transformation `flip-horiz', which
