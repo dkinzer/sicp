@@ -109,8 +109,27 @@
 ;      exponentiation.)  Build in the rules that anything raised to the
 ;      power 0 is 1 and anything raised to the power 1 is the thing
 ;      itself.
-; 
+ 
+(define (variable? x)  (symbol? x))
+
+(define (same-variable? v1 v2)
+  (and (variable? v1)  (variable? v2)  (eq? v1 v2)))
+
+(define (make-sum a1 a2)  (list '+ a1 a2))
+
+(define (sum? x)
+    (and (pair? x)  (eq? (car x) '+)))
+
+(define (addend s)  (cadr s))
+
+(define (augend s)  (caddr s))
+
+(define (product? x)
+    (and (pair? x)  (eq? (car x) '*)))
+
+
 ; {{{3 Solution
+
 ; {{{2 Exercise 2.57:
 ; {{{3 Problem
 ;      Extend the differentiation program to handle sums
