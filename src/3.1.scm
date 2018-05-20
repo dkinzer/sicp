@@ -56,6 +56,20 @@
 ;           1
 ; 
 ; {{{3 Solution
+(define (make-monitored f)
+  (let ((count 0))
+    (lambda (x)
+      (cond ((eq? 'how-many-calls? x) count)
+            ((eq? 'reset-count x) (set! count 0))
+            ((begin (set! count (+ count 1))
+                    (f x)))))))
+
+(define s (make-monitored sqrt))
+(assert '(equal? 10 (s 100)))
+(assert '(equal? 1 (s 'how-many-calls?)))
+(s 'reset-count)
+(assert '(equal? 0 (s 'how-many-calls?)))
+
 ; {{{2 Exercise 3.3:
 ; {{{3 Problem
 ;      Modify the `make-account' procedure so that it
