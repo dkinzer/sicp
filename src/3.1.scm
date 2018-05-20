@@ -61,7 +61,7 @@
     (lambda (x)
       (cond ((eq? 'how-many-calls? x) count)
             ((eq? 'reset-count x) (set! count 0))
-            ((begin (set! count (+ count 1))
+            (else (begin (set! count (+ count 1))
                     (f x)))))))
 
 (define s (make-monitored sqrt))
@@ -98,13 +98,21 @@
   (define (deposit amount)
     (set! balance (+ balance amount))
     balance)
+  (define check-password
+    (make-monitored
+      (lambda (p) (equal? password p))))
+  (define (call-the-cops) (lambda (x) "Calling the cops."))
   (define (dispatch p m)
-    (if (equal? password p)
-        (cond ((eq? m 'withdraw) withdraw)
-              ((eq? m 'deposit) deposit)
-              (else (error "Unknown request -- MAKE-ACCOUNT"
-                           m)))
-        (error "Incorrect password")))
+    (if (check-password p)
+        (begin
+          (check-password 'reset-count)
+          (cond ((eq? m 'withdraw) withdraw)
+                ((eq? m 'deposit) deposit)
+                (else (error "Unknown request -- MAKE-ACCOUNT"
+                             m))))
+        (if (>= (check-password 'how-many-calls?) 2)
+            (call-the-cops)
+            (error "Incorrect password"))))
   dispatch)
 
 (define acc (make-account 100 'secret-password))
@@ -112,7 +120,6 @@
 (assert-error "Incorrect password"
               (lambda () ((acc 'some-other-password 'withdraw) 50))
               "acc fails when we use the wrong password")
-
 ; {{{2 Exercise 3.4:
 ; {{{3 Problem
 ;      Modify the `make-account' procedure of *Note
@@ -121,6 +128,9 @@
 ;      incorrect password, it invokes the procedure `call-the-cops'.
 ; 
 ; {{{3 Solution
+
+(assert '(equal? "Calling the cops." ((acc 'bad-password 'withdraw) 40)))
+
 ; {{{1 3.1.2 The Benefits of Introducing Assignment
 ; {{{2 Exercise 3.5:
 ; {{{3 Problem
