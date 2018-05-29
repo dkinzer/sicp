@@ -174,6 +174,44 @@
 ;               (+ low (random range))))
 ; 
 ; {{{3 Solution
+(define (random-in-range low high)
+ (let ((range (- high low)))
+   (+ low (random range))))
+
+(define (monte-carlo trials experiment)
+  (define (iter trials-remaining trials-passed)
+    (cond ((= trials-remaining 0)
+           (/ trials-passed trials))
+          ((experiment)
+           (iter (- trials-remaining 1) (+ trials-passed 1)))
+          (else
+            (iter (- trials-remaining 1) trials-passed))))
+  (iter trials 0))
+
+(define (halfway-between a b)
+  (if (< b a)
+      (halfway-between b a)
+      (+ a (/ (- b a) 2))))
+
+(define (rec-area x1 x2 y1 y2)
+  (let ((width (abs (- x2 x1)))
+        (height (abs (- y2 y1))))
+    (* width height)))
+
+(define (test-within-unit-circle x1 x2 y1 y2)
+  (lambda ()
+    (let ((a (halfway-between x1 x2))
+          (b (halfway-between y1 y2))
+          (x (random-in-range x1 x2))
+          (y (random-in-range y1 y2)))
+      (<= (+ (pow (- x a) 2) (pow (- y b) 2)) 1))))
+
+(define (estimate-integral trials experiment x1 x2 y1 y2)
+  (* (rec-area x1 x2 y1 y2) (monte-carlo trials (experiment x1 x2 y1 y2))))
+
+; Just test that the delta between pi and estimate is an ok range
+(define pi-estimate (estimate-integral 10000 test-within-unit-circle 2 4 2 4))
+(assert '(<= (abs (- 3.14151 pi-estimate))  .2))
 ; {{{2 Exercise 3.6:
 ; {{{3 Problem
 ;      It is useful to be able to reset a random-number
